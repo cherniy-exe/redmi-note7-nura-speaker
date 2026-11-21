@@ -16,6 +16,8 @@ sdm660-mainline kernel.
 - Verified 2026-11-21: `dmesg` → `max98927 1-003a: MAX98937 revisionID: 0x43`,
   `lsmod` → `snd_soc_max98927`, `pactl` → `HiFi (Mic, Speaker)`,
   `speaker-test -D pulse -c 2 -t sine -f 500` слышен пользователем.
+- Companion repo for the cameras: https://github.com/cherniy-exe/redmi-note7-nura-camera
+  (both patch sets were tested together; they can also be applied separately).
 - Does **not** change IPA/modem. Do not `rmmod ipa` and never install `ipa2-lite` on sdm660.
 
 ## What is inside
