@@ -1,0 +1,27 @@
+From dbc2287a5a7cd9391c9e9429b93cdc5c4e750abd Mon Sep 17 00:00:00 2001
+From: Franco Ortiz <franqitto@gmail.com>
+Date: Thu, 12 Nov 2026 15:46:02 -0300
+Subject: [PATCH] ASoC: dt-bindings: maxim,max98925: add MAX98937
+
+The MAX98937 is handled by the max98927 driver through a translated
+register map. It takes the same properties.
+
+Signed-off-by: Franco Ortiz <franqitto@gmail.com>
+[Miguel: dropped the Assisted-by tag]
+Signed-off-by: Miguel Sobral Teixeira <mest2011mest@gmail.com>
+---
+ Documentation/devicetree/bindings/sound/maxim,max98925.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/sound/maxim,max98925.yaml b/Documentation/devicetree/bindings/sound/maxim,max98925.yaml
+index 121e8d2d44da0b..02205822c8164b 100644
+--- a/Documentation/devicetree/bindings/sound/maxim,max98925.yaml
++++ b/Documentation/devicetree/bindings/sound/maxim,max98925.yaml
+@@ -15,6 +15,7 @@ properties:
+       - maxim,max98925
+       - maxim,max98926
+       - maxim,max98927
++      - maxim,max98937
+ 
+   reg:
+     maxItems: 1

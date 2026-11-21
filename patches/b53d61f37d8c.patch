@@ -1,0 +1,113 @@
+From b53d61f37d8c00de77976204a87885222afe4a26 Mon Sep 17 00:00:00 2001
+From: Miguel Sobral Teixeira <mest2011mest@gmail.com>
+Date: Sun, 15 Nov 2026 14:34:18 -0300
+Subject: [PATCH] arm64: dts: qcom: sdm660-xiaomi-lavender: Enable the speaker
+ amplifier
+
+Describe the MAX98937 speaker amplifier on blsp_i2c6, with its reset
+on GPIO 77, and connect it to the primary MI2S port, following the
+Redmi Note 6 Pro (tulip).
+
+Signed-off-by: Miguel Sobral Teixeira <mest2011mest@gmail.com>
+---
+ .../qcom/sdm660-xiaomi-lavender-common.dtsi   | 59 ++++++++++++++++++-
+ 1 file changed, 58 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender-common.dtsi b/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender-common.dtsi
+index fcbf003628f540..2c7af3da920e69 100644
+--- a/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm660-xiaomi-lavender-common.dtsi
+@@ -142,6 +142,18 @@
+ 	memory-region = <&zap_shader_region>;
+ };
+ 
++&blsp_i2c6 {
++	status = "okay";
++
++	speaker_amp: audio-codec@3a {
++		compatible = "maxim,max98937";
++		reg = <0x3a>;
++		#sound-dai-cells = <0>;
++
++		reset-gpios = <&tlmm 77 GPIO_ACTIVE_LOW>;
++	};
++};
++
+ &blsp1_uart2 {
+ 	status = "okay";
+ };
+@@ -292,6 +304,11 @@
+ };
+ 
+ &q6afedai {
++	dai@16 {
++		reg = <PRIMARY_MI2S_RX>;
++		qcom,sd-lines = <0>;
++	};
++
+ 	dai@81 {
+ 		reg = <LPI_MI2S_RX_0>;
+ 		qcom,sd-lines = <0 1>;
+@@ -625,7 +642,8 @@
+ 	model = "Xiaomi Redmi Note 7";
+ 
+ 	pinctrl-0 = <&cdc_pdm_default>,
+-			<&cdc_dmic_default>;
++			<&cdc_dmic_default>,
++			<&pri_mi2s_active>;
+ 	pinctrl-names = "default";
+ 
+ 	audio-routing = "PDM_RX1", "Digital PDM_RX1",
+@@ -668,6 +686,22 @@
+ 		};
+ 	};
+ 
++	pri-mi2s-dai-link {
++		link-name = "Primary MI2S Playback";
++
++		cpu {
++			sound-dai = <&q6afedai PRIMARY_MI2S_RX>;
++		};
++
++		platform {
++			sound-dai = <&q6routing>;
++		};
++
++		codec {
++			sound-dai = <&speaker_amp>;
++		};
++	};
++
+ 	int3-mi2s-dai-link {
+ 		link-name = "Internal MI2S Capture";
+ 
+@@ -689,6 +723,29 @@
+ &tlmm {
+ 	gpio-reserved-ranges = <8 4>;
+ 
++	pri_mi2s_active: pri-mi2s-active-state {
++		sck-pins {
++			pins = "gpio12";
++			function = "pri_mi2s";
++			drive-strength = <8>;
++			bias-disable;
++		};
++
++		ws-pins {
++			pins = "gpio13";
++			function = "pri_mi2s_ws";
++			drive-strength = <8>;
++			bias-disable;
++		};
++
++		data-pins {
++			pins = "gpio14", "gpio15";
++			function = "pri_mi2s";
++			drive-strength = <8>;
++			bias-disable;
++		};
++	};
++
+ 	mdss_dsi_active: mdss-dsi-active-state {
+ 		function = "gpio";
+ 		pins = "gpio53";

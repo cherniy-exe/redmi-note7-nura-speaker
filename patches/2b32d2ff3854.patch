@@ -1,0 +1,39 @@
+From 2b32d2ff38547609ccd670e2f5dd41a9a0f8ae1a Mon Sep 17 00:00:00 2001
+From: Miguel Sobral Teixeira <mest2011mest@gmail.com>
+Date: Sun, 15 Nov 2026 14:34:17 -0300
+Subject: [PATCH] ASoC: max98927: hold the reset line for 1 ms
+
+The driver requests the reset GPIO asserted and releases it right
+away, so the pulse only lasts as long as the two GPIO calls. Xiaomi's
+GPL driver for the MAX98927 and MAX98937 keeps the line asserted for
+1 ms before releasing it. Do the same.
+
+Tested on a MAX98937: the amplifier probes and plays with and without
+the delay.
+
+Signed-off-by: Miguel Sobral Teixeira <mest2011mest@gmail.com>
+---
+ sound/soc/codecs/max98927.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/sound/soc/codecs/max98927.c b/sound/soc/codecs/max98927.c
+index 6db52d0e0201d8..deac45880f6f40 100644
+--- a/sound/soc/codecs/max98927.c
++++ b/sound/soc/codecs/max98927.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/acpi.h>
++#include <linux/delay.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+@@ -938,6 +939,8 @@ static int max98927_i2c_probe(struct i2c_client *i2c)
+ 	}
+ 
+ 	if (max98927->reset_gpio) {
++		/* Hold the part in reset for 1 ms, as the vendor driver does */
++		usleep_range(1000, 2000);
+ 		gpiod_set_value_cansleep(max98927->reset_gpio, 0);
+ 		/* Wait for i2c port to be ready */
+ 		usleep_range(5000, 6000);

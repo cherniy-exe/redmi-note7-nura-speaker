@@ -1,0 +1,25 @@
+From 29f06975b3c2746bdef81e17a3f3f5ceca0df398 Mon Sep 17 00:00:00 2001
+From: Miguel Sobral Teixeira <mest2011mest@gmail.com>
+Date: Sun, 15 Nov 2026 14:34:18 -0300
+Subject: [PATCH] arm64: configs: sdm660: Enable the MAX98927 amplifier driver
+
+Build the max98927 driver, which also handles the MAX98937, as a
+module. The Redmi Note 7 (lavender) speaker needs it.
+
+Signed-off-by: Miguel Sobral Teixeira <mest2011mest@gmail.com>
+---
+ arch/arm64/configs/sdm660_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/configs/sdm660_defconfig b/arch/arm64/configs/sdm660_defconfig
+index 3695b920a560ad..950f223f6b4806 100644
+--- a/arch/arm64/configs/sdm660_defconfig
++++ b/arch/arm64/configs/sdm660_defconfig
+@@ -574,6 +574,7 @@ CONFIG_SND_SOC_QCOM=m
+ CONFIG_SND_SOC_APQ8016_SBC=m
+ CONFIG_SND_SOC_QDSP6_USB=m
+ CONFIG_SND_SOC_SM8250=m
++CONFIG_SND_SOC_MAX98927=m
+ CONFIG_SND_SOC_MSM8916_WCD_ANALOG=m
+ CONFIG_SND_SOC_MSM8916_WCD_DIGITAL=m
+ CONFIG_SND_SOC_TAS2557=m
